@@ -1,11 +1,12 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { VueLoaderPlugin } = require("vue-loader");
 
 const isDev = process.env.NODE_ENV === 'development';
 
 module.exports = {
-  entry: "./src/index",
+  entry: "./src/main.ts",
   mode: isDev ? 'development' : 'production',
   output: {
     filename: "[name].js",
@@ -27,21 +28,30 @@ module.exports = {
         }]
       },
       {
-        test: /\.ts$/,
+        test: /\.tsx?$/,
         use: [
           {
-            loader: 'babel-loader',
+            loader: 'ts-loader',
             options: {
-              presets: ['@babel/preset-env', '@babel/preset-typescript'],
+              appendTsSuffixTo: [/\.vue$/]
             }
-          },
+          }
         ]
       },
       {
-        test: /\.css$/i,
+        test: /\.vue$/,
+        use: ["vue-loader"],
+      },
+      {
+        test: /\.css$/,
         use: [
           isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1
+            }
+          },
           {
             loader: 'postcss-loader',
             options: {
@@ -51,11 +61,35 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.less$/,
+        use: [
+          isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [require("autoprefixer")],
+              }
+            }
+          },
+          'less-loader',
+        ]
       }
     ]
   },
   plugins: [
-    new HtmlWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: 'public/index.html'
+    }),
     new MiniCssExtractPlugin(),
+    new VueLoaderPlugin()
   ]
 }
