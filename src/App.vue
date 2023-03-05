@@ -6,7 +6,7 @@
 import { add } from './util'
 import { ref } from 'vue'
 
-const a = ref(1)
+const a = ref(2)
 </script>
 <style lang="less" scoped>
 .btn {

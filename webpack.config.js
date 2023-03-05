@@ -91,5 +91,9 @@ module.exports = {
     }),
     new MiniCssExtractPlugin(),
     new VueLoaderPlugin()
-  ]
+  ],
+  devServer: {
+    open: true,
+    hot: true,
+  }
 }
