@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { VueLoaderPlugin } = require("vue-loader");
 const { DefinePlugin } = require('webpack');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -10,9 +11,10 @@ module.exports = {
   entry: "./src/main.ts",
   mode: isDev ? 'development' : 'production',
   output: {
+    clean: true,
     filename: "[name].js",
     path: path.join(__dirname, "./dist"),
-    assetModuleFilename: 'images/[hash][ext][query]', // 图片资源
+    assetModuleFilename: 'images/[name]-[hash:5][ext]', // 图片资源
   },
   devtool: false,
   resolve: {
@@ -47,7 +49,7 @@ module.exports = {
       {
         test: /\.css$/,
         use: [
-          isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+          isDev ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
             options: {
@@ -67,7 +69,7 @@ module.exports = {
       {
         test: /\.less$/,
         use: [
-          isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+          isDev ? 'vue-style-loader' : MiniCssExtractPlugin.loader,
           {
             loader: "css-loader",
             options: {
@@ -87,11 +89,17 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif)$/i,
-        type: 'asset/resource'
-      }
+        type: 'asset/resource' // file-loader
+      },
+      //url-loader ---> type: asset/inline
+      {
+        test: /\.svg$/i,
+        type: "asset/source" // raw-loader
+      },
     ]
   },
   plugins: [
+    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: 'public/index.html'
     }),

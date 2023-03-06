@@ -1,12 +1,10 @@
 <template>
-  <div>app {{ a }}</div>
-  <img :src="imgSrc" />
-  <button class="btn" @click="a++">+1</button>
+  <div>app {{ a }} <button class="btn" @click="a++">+1</button></div>
+  <img :src="imgSrc" width="300" />
 </template>
 <script setup lang="ts">
 import imgSrc from './img/1.png';
 import { ref } from 'vue'
-console.log(imgSrc)
 
 const a = ref(2)
 </script>

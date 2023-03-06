@@ -2,6 +2,7 @@
   "compilerOptions": {
     "noImplicitAny": false,
     "moduleResolution": "node",
+    "target": "ESNext"
   },
   "include": ["src/vue-shim.d.ts", "src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
 }
