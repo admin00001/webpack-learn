@@ -2,6 +2,7 @@ const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { VueLoaderPlugin } = require("vue-loader");
+const { DefinePlugin } = require('webpack');
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -11,6 +12,7 @@ module.exports = {
   output: {
     filename: "[name].js",
     path: path.join(__dirname, "./dist"),
+    assetModuleFilename: 'images/[hash][ext][query]', // 图片资源
   },
   devtool: false,
   resolve: {
@@ -82,6 +84,10 @@ module.exports = {
           },
           'less-loader',
         ]
+      },
+      {
+        test: /\.(png|jpg|gif)$/i,
+        type: 'asset/resource'
       }
     ]
   },
@@ -90,7 +96,11 @@ module.exports = {
       template: 'public/index.html'
     }),
     new MiniCssExtractPlugin(),
-    new VueLoaderPlugin()
+    new VueLoaderPlugin(),
+    new DefinePlugin({
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__ : false
+    })
   ],
   devServer: {
     open: true,
