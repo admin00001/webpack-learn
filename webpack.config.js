@@ -32,7 +32,7 @@ module.exports = {
         }]
       },
       {
-        test: /\.tsx?$/,
+        test: /\.ts$/,
         use: [
           {
             loader: 'ts-loader',
@@ -84,7 +84,14 @@ module.exports = {
               }
             }
           },
-          'less-loader',
+          {
+            loader: 'less-loader',
+            options: {
+              lessOptions: {
+                javascriptEnabled: true // https://github.com/ant-design/ant-motion/issues/44 解决ant-design-vue less编译问题
+              }
+            }
+          }
         ]
       },
       {
