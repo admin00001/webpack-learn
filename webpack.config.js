@@ -4,18 +4,21 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { VueLoaderPlugin } = require("vue-loader");
 const { DefinePlugin } = require('webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin')
+const WebpackBar = require('webpackbar')
 
 const isDev = process.env.NODE_ENV === 'development';
 
-module.exports = {
+const config = {
   // profile: true, // 开启stats.json
   entry: "./src/main.ts",
   mode: isDev ? 'development' : 'production',
   output: {
     clean: true,
-    filename: "[name]-[hash:5].js",
+    filename: isDev ? '[name].js' : "[name]-[hash:5].js",
     path: path.join(__dirname, "./dist"),
-    assetModuleFilename: 'images/[name]-[hash:5][ext]', // 图片资源
+    assetModuleFilename: isDev ? '[name][ext][query]' : 'assets/[name]-[hash:5][ext]', // 静态资源
   },
   devtool: false,
   resolve: {
@@ -148,21 +151,52 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'public/index.html'
     }),
+    new VueLoaderPlugin(),
+    new DefinePlugin({
+      __VUE_OPTIONS_API__: true,
+      __VUE_PROD_DEVTOOLS__: false
+    }),
+    // 进度条
+    new WebpackBar({
+      color: 'green',
+      basic: false
+    })
+  ]
+}
+
+if (isDev) {
+  config.devServer = {
+    open: true,
+    hot: true,
+  }
+  config.plugins.push(
+    new ForkTsCheckerWebpackPlugin() // fork 出子进程，专门用于执行类型检查
+  )
+} else {
+  config.plugins.push(
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash:5].css',
       chunkFilename: '[name].[contenthash:5].css',
       ignoreOrder: true
-    }),
-    new VueLoaderPlugin(),
-    new DefinePlugin({
-      __VUE_OPTIONS_API__: true,
-      __VUE_PROD_DEVTOOLS__ : false
-    }),
-    // fork 出子进程，专门用于执行类型检查
-    new ForkTsCheckerWebpackPlugin()
-  ],
-  devServer: {
-    open: true,
-    hot: true,
+    })
+  )
+  config.optimization = {
+    minimizer: [
+      new TerserPlugin({
+        parallel: true,
+        exclude: /node_module/,
+        terserOptions: {
+          toplevel: true, // 最高级别，删除无用代码
+          compress: {
+            arguments: false,
+            dead_code: true,
+            pure_funcs: ['console.log'] // 删除console.log
+          }
+        }
+      }),
+      new CssMinimizerPlugin() // css压缩
+    ]
   }
 }
+
+module.exports = config
