@@ -16,9 +16,9 @@ const config = {
   mode: isDev ? 'development' : 'production',
   output: {
     clean: true,
-    filename: isDev ? '[name].js' : "[name]-[hash:5].js",
+    filename: isDev ? '[name].js' : "[name]-[contenthash:5].js",
     path: path.join(__dirname, "./dist"),
-    assetModuleFilename: isDev ? '[name][ext][query]' : 'assets/[name]-[hash:5][ext]', // 静态资源
+    assetModuleFilename: isDev ? '[name][ext][query]' : 'assets/[name]-[contenthash:5][ext]', // 静态资源
   },
   devtool: false,
   resolve: {
@@ -181,6 +181,12 @@ if (isDev) {
     })
   )
   config.optimization = {
+    runtimeChunk: { name: "runtime" }, // 记录运行时代码的信息，用于contenthash变化后不影响其他chunk对它的引用
+    usedExports: true, // 标记导出导入模块列表给tree-shaking用
+    splitChunks: {
+      chunks: 'all', // 对所有chunk: Initial|Async 都进行优化分割，因为默认只对Async chunk生效
+    },
+    minimize: true, // 开启压缩，配合 minimizer数组
     minimizer: [
       new TerserPlugin({
         parallel: true,
