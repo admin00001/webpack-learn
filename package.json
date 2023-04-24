@@ -7,7 +7,8 @@
     "prepare": "husky install",
     "stats": "cross-env NODE_ENV=production webpack --json=stats.json",
     "build": "cross-env NODE_ENV=production webpack",
-    "dev": "cross-env NODE_ENV=development webpack serve"
+    "dev": "cross-env NODE_ENV=development webpack serve",
+    "preview": "serve ./dist -p 4000 -s"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +36,7 @@
     "mini-css-extract-plugin": "^2.7.2",
     "postcss": "^8.4.21",
     "postcss-loader": "^7.0.2",
+    "serve": "^14.2.0",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.4",
