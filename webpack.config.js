@@ -47,6 +47,7 @@ const config = {
 							plugins: ['@vue/babel-plugin-jsx']
 						}
 					},
+          '@ant-design-vue/vue-jsx-hot-loader',
 				]
 			},
 			{
@@ -70,6 +71,7 @@ const config = {
 							plugins: ['@vue/babel-plugin-jsx']
 						}
 					},
+          '@ant-design-vue/vue-jsx-hot-loader',
 					{
 						loader: 'ts-loader',
 						options: {

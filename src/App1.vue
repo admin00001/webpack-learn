@@ -5,7 +5,7 @@
         class="btn"
         @click="a++"
       >
-        +1
+        +1232
       </button>
     </div>
     <img
