@@ -29,15 +29,24 @@ const config = {
 	},
 	module: {
 		rules: [
-			{
-				test: /\.js$/,
-				use: [{
-					loader: 'babel-loader',
-					options: {
-						presets: ['@babel/preset-env'],
-					}
-				}]
-			},
+			// {
+			// 	test: /\.js$/,
+			// 	use: [{
+			// 		loader: 'babel-loader',
+			// 		options: {
+			// 			presets: [
+      //         [
+      //           '@babel/preset-env',
+      //           {
+      //             'corejs': 3, // 基础库 core-js 的版本，一般指定为最新的大版本
+      //             'useBuiltIns': 'usage',  // Polyfill 注入策略
+      //             'modules': false // 不将 ES 模块语法转换为其他模块语法
+      //           }
+      //         ]
+      //       ],
+			// 		}
+			// 	}]
+			// },
 			{
 				test: /\.jsx$/,
 				use: [

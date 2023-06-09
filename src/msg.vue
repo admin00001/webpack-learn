@@ -9,7 +9,7 @@ export default defineComponent({
     }
   },
   render({ msg }) {
-    return <div>{msg} 哥哥</div>
+    return <div>你好，{msg} </div>
   }
 })
 </script>
